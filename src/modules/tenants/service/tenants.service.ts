@@ -3,7 +3,7 @@ import TenantDto from '../entities/tenant.dto';
 import { PrismaService } from 'src/modules/shared/prisma/prisma.service';
 
 @Injectable()
-export class CreateTenantService {
+export class TenantsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async createTenant(dto: TenantDto): Promise<string | Error> {
