@@ -1,13 +1,13 @@
-import { Controller, Get } from '@nestjs/common';
-import { GetTenantService } from '../service/tenants.service';
+import { Controller, Post } from '@nestjs/common';
+import { CreateTenantService } from '../service/tenants.service';
 import TenantDto from '../entities/tenant.dto';
 
 @Controller('tenants')
 export class TenantsController {
-  constructor(private readonly appService: GetTenantService) {}
+  constructor(private readonly appService: CreateTenantService) {}
 
-  @Get()
-  getHello(dto: TenantDto): string {
-    return this.appService.getHello(dto);
+  @Post('create')
+  async createTenant(dto: TenantDto): Promise<string | Error> {
+    return this.appService.createTenant(dto);
   }
 }
