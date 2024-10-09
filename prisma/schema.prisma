@@ -9,8 +9,69 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
+enum Stages {
+  open
+  waiting
+  progress
+  staging
+  production
+  failed
+}
 
+
+model Tenants {
+  id              Int           @id @default(autoincrement())
+  active          Boolean       @default(false)
+  uuid            String        @unique
+  name            String  
+  branch          String?       
+  domain          String        @unique
+  database        String        @unique
+  stage           Stages        @default(open)
+  invoices        Invoices[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime?
+  updatedBy       String
+  softDeleteAt    DateTime?
+}
+
+model Users {
+  id              Int           @id @default(autoincrement())
+  name            String  
+  email           String        @unique
+  password        String  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime?
+  softDeleteAt    DateTime?
+}
+
+model Plans {
+  id              Int           @id @default(autoincrement())
+  name            String
+  billingCycle    String
+  billingAmount   Float
+  billingUnit     String
+  invoices        Invoices[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime?
+  softDeleteAt    DateTime?
+}
+
+model Invoices {
+  id              Int           @id @default(autoincrement())
+  tenant          Tenants       @relation(fields: [tenantId], references: [id])
+  tenantId        Int
+  plan            Plans         @relation(fields: [planId], references: [id])
+  planId          Int
+  amount          Float
+  stage           String
+  dueAt           DateTime?
+  paidAt          DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime?
+  softDeleteAt    DateTime?
+}
