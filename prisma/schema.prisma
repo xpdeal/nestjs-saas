@@ -26,7 +26,7 @@ enum Stages {
 model Tenants {
   id              Int           @id @default(autoincrement())
   active          Boolean       @default(false)
-  uuid            String        @unique
+  uuid            String        @unique @default(cuid())
   name            String  
   branch          String?       
   domain          String        @unique
@@ -74,4 +74,10 @@ model Invoices {
   createdAt       DateTime      @default(now())
   updatedAt       DateTime?
   softDeleteAt    DateTime?
+}
+
+model Logs {
+  id             Int           @id @default(autoincrement())
+  payload        Json
+  label          String
 }
