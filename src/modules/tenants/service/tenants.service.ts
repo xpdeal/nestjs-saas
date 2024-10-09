@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import TenantDto from '../entities/tenant.dto';
 import { PrismaService } from 'src/modules/shared/prisma/prisma.service';
 
@@ -18,7 +18,7 @@ export class CreateTenantService {
       });
       return `Tenant ${user.name} created successfully!`;
     } catch (error) {
-      return Error(error);
+      throw new BadRequestException(error.toString());
     }
   }
 }
